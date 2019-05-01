@@ -3,24 +3,20 @@ package br.com.vendas.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-@Entity
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class Usuario implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cod_usuario;
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private Integer cod_usuario;
 	private String nome;
 	private String senha;
 	private Integer tipo_permissao;
-	private Integer func_cod_funcionario;
-	private Integer cli_cod_cliente;
 	private String endereco;
 	private Integer numero;
 	private String bairro;
@@ -37,16 +33,16 @@ public class Usuario implements Serializable{
 	public Usuario() {}
 	
 	
-	public Usuario(Integer cod_usuario, String nome, String senha, Integer tipo_permissao, Integer func_cod_funcionario,
-			Integer cli_cod_cliente, String endereco, Integer numero, String bairro, String cidade, String estado,
-			String cpf, Character sexo, String email, String telefone, String celular, Date data_cadastro) {
-		
-		this.cod_usuario = cod_usuario;
+
+
+	public Usuario(String nome, String senha, Integer tipo_permissao, String endereco,
+			Integer numero, String bairro, String cidade, String estado, String cpf, Character sexo, String email,
+			String telefone, String celular, Date data_cadastro) {
+		super();
+		//this.cod_usuario = cod_usuario;
 		this.nome = nome;
 		this.senha = senha;
 		this.tipo_permissao = tipo_permissao;
-		this.func_cod_funcionario = func_cod_funcionario;
-		this.cli_cod_cliente = cli_cod_cliente;
 		this.endereco = endereco;
 		this.numero = numero;
 		this.bairro = bairro;
@@ -61,6 +57,8 @@ public class Usuario implements Serializable{
 	}
 
 
+/*
+
 	public Integer getCod_usuario() {
 		return cod_usuario;
 	}
@@ -69,7 +67,7 @@ public class Usuario implements Serializable{
 	public void setCod_usuario(Integer cod_usuario) {
 		this.cod_usuario = cod_usuario;
 	}
-
+*/
 
 	public String getNome() {
 		return nome;
@@ -99,27 +97,6 @@ public class Usuario implements Serializable{
 	public void setTipo_permissao(Integer tipo_permissao) {
 		this.tipo_permissao = tipo_permissao;
 	}
-
-
-	public Integer getFunc_cod_funcionario() {
-		return func_cod_funcionario;
-	}
-
-
-	public void setFunc_cod_funcionario(Integer func_cod_funcionario) {
-		this.func_cod_funcionario = func_cod_funcionario;
-	}
-
-
-	public Integer getCli_cod_cliente() {
-		return cli_cod_cliente;
-	}
-
-
-	public void setCli_cod_cliente(Integer cli_cod_cliente) {
-		this.cli_cod_cliente = cli_cod_cliente;
-	}
-
 
 	public String getEndereco() {
 		return endereco;
@@ -230,34 +207,6 @@ public class Usuario implements Serializable{
 		this.data_cadastro = data_cadastro;
 	}
 
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((cod_usuario == null) ? 0 : cod_usuario.hashCode());
-		return result;
-	}
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Usuario other = (Usuario) obj;
-		if (cod_usuario == null) {
-			if (other.cod_usuario != null)
-				return false;
-		} else if (!cod_usuario.equals(other.cod_usuario))
-			return false;
-		return true;
-	}
-	
-	
-	
+		
 
 }
