@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.vendas.domain.Funcionario;
-import br.com.vendas.services.FuncionarioService;
-
+import br.com.vendas.domain.Categoria;
+import br.com.vendas.services.CategoriaService;
 
 @RestController
-@RequestMapping(value = "/funcionarios")
-public class FuncionarioController {
+@RequestMapping(value = "/categorias")
+public class CategoriaController {
 	
 	@Autowired
-	private FuncionarioService service;
+	private CategoriaService categoriaService; 
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
-		Funcionario obj = service.busca(id);
+		Categoria obj = categoriaService.busca(id);
 		
 		return ResponseEntity.ok().body(obj);
-
 	}
+	
+	
 
 }

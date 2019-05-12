@@ -1,8 +1,8 @@
 package br.com.vendas.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -22,7 +22,7 @@ public class Funcionario extends Usuario implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cod_funciconario;
-	private BigDecimal salario;
+	private Double salario;
 	
 	//Relacionamento um para muitos um cliente tem várias notas
 		@OneToMany(mappedBy = "cliente", targetEntity = NotaDeVenda.class, 
@@ -36,12 +36,19 @@ public class Funcionario extends Usuario implements Serializable{
 	
 
 
-	public Funcionario(Integer cod_funciconario, BigDecimal salario) {
+	public Funcionario(Integer cod_funciconario, Double salario) {
 		super();
 		this.cod_funciconario = cod_funciconario;
 		this.salario = salario;
 	}
 
+	public Funcionario(String nome, String cpf, Character sexo, Date data_cadastro, Integer cod_funciconario,
+			Double salario, List<NotaDeVenda> notaDeVenda) {
+		super(nome, cpf, sexo, data_cadastro);
+		this.cod_funciconario = cod_funciconario;
+		this.salario = salario;
+		this.notaDeVenda = notaDeVenda;
+	}
 
 
 
@@ -56,12 +63,12 @@ public class Funcionario extends Usuario implements Serializable{
 	}
 
 
-	public BigDecimal getSalario() {
+	public Double getSalario() {
 		return salario;
 	}
 
 
-	public void setSalario(BigDecimal salario) {
+	public void setSalario(Double salario) {
 		this.salario = salario;
 	}
 

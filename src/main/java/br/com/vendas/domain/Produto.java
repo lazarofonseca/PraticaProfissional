@@ -1,12 +1,17 @@
 package br.com.vendas.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
 
 @Entity
 public class Produto implements Serializable{
@@ -17,15 +22,22 @@ public class Produto implements Serializable{
 	private Integer cod_produto;
 	private String nome;
 	private String descricao;
-	private BigDecimal valor_compra;
-	private BigDecimal valor_venda;
+	private Double valor_compra;
+	private Double valor_venda;
 	private Integer quantidade;
+	
+	@ManyToMany
+	@JoinTable(name = "PRODUTO_CATEGORIA",
+	joinColumns = @JoinColumn(name = "produto_id"),
+	inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+	private List<Categoria> categorias = new ArrayList<Categoria>();
+	
 	
 	public Produto() {
 		
 	}
 
-	public Produto(Integer cod_produto, String nome, String descricao, BigDecimal valor_compra, BigDecimal valor_venda,
+	public Produto(Integer cod_produto, String nome, String descricao, Double valor_compra, Double valor_venda,
 			Integer quantidade) {
 		super();
 		this.cod_produto = cod_produto;
@@ -60,19 +72,19 @@ public class Produto implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public BigDecimal getValor_compra() {
+	public Double getValor_compra() {
 		return valor_compra;
 	}
 
-	public void setValor_compra(BigDecimal valor_compra) {
+	public void setValor_compra(Double valor_compra) {
 		this.valor_compra = valor_compra;
 	}
 
-	public BigDecimal getValor_venda() {
+	public Double getValor_venda() {
 		return valor_venda;
 	}
 
-	public void setValor_venda(BigDecimal valor_venda) {
+	public void setValor_venda(Double valor_venda) {
 		this.valor_venda = valor_venda;
 	}
 
@@ -82,6 +94,16 @@ public class Produto implements Serializable{
 
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
+	}
+
+	
+	
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	@Override

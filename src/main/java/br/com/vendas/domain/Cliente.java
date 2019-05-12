@@ -2,6 +2,7 @@ package br.com.vendas.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,23 +20,31 @@ public class Cliente extends Usuario implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cod_cliente;
-	private String cpf;
+	
 	
 	//Relacionamento um para muitos um cliente tem várias notas
 	@OneToMany(mappedBy = "cliente", targetEntity = NotaDeVenda.class, 
 			fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<NotaDeVenda> notaDeVenda = new ArrayList<NotaDeVenda>();
 	
+	//Construtor padrão
 	public Cliente() {
 		super();
 	}
 	
-	
+	//Construtor da super classe
+	public Cliente(String nome, String cpf, Character sexo, Date data_cadastro, Integer cod_cliente,
+			List<NotaDeVenda> notaDeVenda) {
+		super(nome, cpf, sexo, data_cadastro);
+		this.cod_cliente = cod_cliente;
+		this.notaDeVenda = notaDeVenda;
+	}
 
-	public Cliente(Integer cod_cliente, String cpf) {
+	//Construtor cliente
+	public Cliente(Integer cod_cliente) {
 		
 		this.cod_cliente = cod_cliente;
-		this.cpf = cpf;
+		
 	
 	}
 
@@ -49,15 +58,6 @@ public class Cliente extends Usuario implements Serializable{
 		this.cod_cliente = cod_cliente;
 	}
 
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	
-	
 
 	public List<NotaDeVenda> getNotaDeVenda() {
 		return notaDeVenda;
