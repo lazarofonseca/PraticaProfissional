@@ -5,24 +5,24 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.vendas.domain.Categoria;
-import br.com.vendas.repositories.CategoriaRepository;
+import br.com.vendas.domain.Cliente;
+import br.com.vendas.repositories.ClienteRepository;
 import javassist.tools.rmi.ObjectNotFoundException;
 
 
 @Service
-public class CategoriaService {
+public class ClienteService {
 
 	@Autowired
-	private CategoriaRepository repo; 
+	private ClienteRepository repo; 
 
-	public Categoria busca(Integer id) throws ObjectNotFoundException {
+	public Cliente busca(Integer id) throws ObjectNotFoundException {
 		
-		Optional<Categoria> obj = repo.findById(id);
+		Optional<Cliente> obj = repo.findById(id);
 		
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrada! Id: " + id + ", Tipo: " 
-		 + Categoria.class.getName()));
+		 + Cliente.class.getName()));
 
 		
 	}

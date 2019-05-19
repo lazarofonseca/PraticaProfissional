@@ -9,24 +9,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.vendas.domain.Funcionario;
-import br.com.vendas.services.FuncionarioService;
-
+import br.com.vendas.domain.Cliente;
+import br.com.vendas.services.ClienteService;
+import javassist.tools.rmi.ObjectNotFoundException;
 
 @RestController
-@RequestMapping(value = "/funcionarios")
-public class FuncionarioController {
+@RequestMapping(value = "/clientes")
+public class ClienteController {
 	
 	@Autowired
-	private FuncionarioService service;
+	private ClienteService clienteService; 
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException{
 		
-		Funcionario obj = service.busca(id);
+		Cliente obj = clienteService.busca(id);
 		
 		return ResponseEntity.ok().body(obj);
-
 	}
+	
+	
 
 }

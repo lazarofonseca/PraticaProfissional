@@ -1,115 +1,113 @@
 package br.com.vendas.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Time;
+import java.util.Date;
 
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
-import java.util.Date;
-
-
+//CLASSE QUE REPRESENTA O PEDIDO DOS CLIENTES
 @Entity
 public class NotaDeVenda implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue
-	private Integer cod_venda;
-	private BigDecimal valor;
-	@ManyToOne
-	@JoinColumn(name = "cod_funcionario")
-	private Funcionario funcionario;
-	@ManyToOne
-	@JoinColumn(name = "cod_cliente")
-	private Cliente cliente;
-	private Date data_venda;
-	private Time hora_venda;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer cod_nota;
+	private Date instante;
 	
+	//Mapeamento um para um
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "notaVenda")
+	private Pagamento pagamento;
+	
+	@ManyToOne
+	@JoinColumn(name = "clienete_id")
+	private Cliente cliente;
+	
+	@ManyToOne
+	@JoinColumn(name = "endereco_entrega_id")
+	private Endereco enderecoDeEntrega;
 	
 	
 	public NotaDeVenda() {
 		
 	}
 
-	public NotaDeVenda(Integer cod_venda, BigDecimal valor, Funcionario funcionario, Cliente cliente, Date data_venda,
-			Time hora_venda) {
+
+	public NotaDeVenda(Integer cod_nota, Date instante, Cliente cliente,
+			Endereco enderecoDeEntrega) {
 		super();
-		this.cod_venda = cod_venda;
-		this.valor = valor;
-		this.funcionario = funcionario;
+		this.cod_nota = cod_nota;
+		this.instante = instante;
 		this.cliente = cliente;
-		this.data_venda = data_venda;
-		this.hora_venda = hora_venda;
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
 
-
-
-	public Integer getCod_venda() {
-		return cod_venda;
+	public Integer getCod_nota() {
+		return cod_nota;
 	}
 
-	public void setCod_venda(Integer cod_venda) {
-		this.cod_venda = cod_venda;
+
+	public void setCod_nota(Integer cod_nota) {
+		this.cod_nota = cod_nota;
 	}
 
-	public BigDecimal getValor() {
-		return valor;
+
+	public Date getInstante() {
+		return instante;
 	}
 
-	public void setValor(BigDecimal valor) {
-		this.valor = valor;
+
+	public void setInstante(Date instante) {
+		this.instante = instante;
 	}
 
-	public Date getData_venda() {
-		return data_venda;
+
+	public Pagamento getPagamento() {
+		return pagamento;
 	}
 
-	public void setData_venda(Date data_venda) {
-		this.data_venda = data_venda;
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
 	}
 
-	public Time getHora_venda() {
-		return hora_venda;
-	}
-
-	public void setHora_venda(Time hora_venda) {
-		this.hora_venda = hora_venda;
-	}
-	
-	
 
 	public Cliente getCliente() {
 		return cliente;
 	}
 
+
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	
-	
 
-	public Funcionario getFuncionario() {
-		return funcionario;
+
+	public Endereco getEnderecoDeEntrega() {
+		return enderecoDeEntrega;
 	}
 
-	public void setFuncionario(Funcionario funcionario) {
-		this.funcionario = funcionario;
+
+	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cod_venda == null) ? 0 : cod_venda.hashCode());
+		result = prime * result + ((cod_nota == null) ? 0 : cod_nota.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -120,15 +118,13 @@ public class NotaDeVenda implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		NotaDeVenda other = (NotaDeVenda) obj;
-		if (cod_venda == null) {
-			if (other.cod_venda != null)
+		if (cod_nota == null) {
+			if (other.cod_nota != null)
 				return false;
-		} else if (!cod_venda.equals(other.cod_venda))
+		} else if (!cod_nota.equals(other.cod_nota))
 			return false;
 		return true;
 	}
-	
-	
 	
 	
 

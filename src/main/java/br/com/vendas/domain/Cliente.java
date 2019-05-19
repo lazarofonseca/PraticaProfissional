@@ -3,15 +3,23 @@ package br.com.vendas.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import br.com.vendas.domain.enums.TipoCliente;
 
 @Entity
 public class Cliente extends Usuario implements Serializable{
@@ -20,11 +28,18 @@ public class Cliente extends Usuario implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cod_cliente;
+	private Integer tipo;
 	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "cliente")
+	private List<Endereco> enderecos = new ArrayList<Endereco>();
+	
+	@ElementCollection
+	@CollectionTable(name = "TELEFONE")
+	private Set<String> telefones = new HashSet<String>();
 	
 	//Relacionamento um para muitos um cliente tem várias notas
-	@OneToMany(mappedBy = "cliente", targetEntity = NotaDeVenda.class, 
-			fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cliente")
 	private List<NotaDeVenda> notaDeVenda = new ArrayList<NotaDeVenda>();
 	
 	//Construtor padrão
@@ -34,10 +49,10 @@ public class Cliente extends Usuario implements Serializable{
 	
 	//Construtor da super classe
 	public Cliente(String nome, String cpf, Character sexo, Date data_cadastro, Integer cod_cliente,
-			List<NotaDeVenda> notaDeVenda) {
+			TipoCliente tipo) {
 		super(nome, cpf, sexo, data_cadastro);
 		this.cod_cliente = cod_cliente;
-		this.notaDeVenda = notaDeVenda;
+		this.tipo = tipo.getCod();
 	}
 
 	//Construtor cliente
@@ -69,7 +84,30 @@ public class Cliente extends Usuario implements Serializable{
 		this.notaDeVenda = notaDeVenda;
 	}
 
+	//Pegando o código com o metódo toEnum que é statico
+	public TipoCliente getTipo() {
+		return TipoCliente.toEnum(tipo);
+	}
 
+	public void setTipo(TipoCliente tipo) {
+		this.tipo = tipo.getCod();
+	}
+
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
+	public Set<String> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(Set<String> telefones) {
+		this.telefones = telefones;
+	}
 
 	@Override
 	public int hashCode() {
