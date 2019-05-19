@@ -2,7 +2,9 @@ package br.com.vendas.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -24,33 +27,43 @@ public class Produto implements Serializable{
 	private Integer cod_produto;
 	private String nome;
 	private String descricao;
-	private Double valor_compra;
 	private Double valor_venda;
-	private Integer quantidade;
 	
 	
 	//A volta da referência no tratamento para exibir o Json
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA",
 	joinColumns = @JoinColumn(name = "produto_id"),
 	inverseJoinColumns = @JoinColumn(name = "categoria_id"))
 	private List<Categoria> categorias = new ArrayList<Categoria>();
 	
+	@JsonIgnore
+	@OneToMany(mappedBy = "cod_IdItem.produto")
+	private Set<ItemVenda> itens = new HashSet<ItemVenda>();
+	
+	
 	
 	public Produto() {
 		
 	}
 
-	public Produto(Integer cod_produto, String nome, String descricao, Double valor_compra, Double valor_venda,
-			Integer quantidade) {
+	public Produto(Integer cod_produto, String nome, String descricao,Double valor_venda) {
 		super();
 		this.cod_produto = cod_produto;
 		this.nome = nome;
 		this.descricao = descricao;
-		this.valor_compra = valor_compra;
 		this.valor_venda = valor_venda;
-		this.quantidade = quantidade;
+		
+	}
+	
+	@JsonIgnore
+	public List<NotaDeVenda> GetnotaDeVendas(){
+		List<NotaDeVenda> lista = new ArrayList<NotaDeVenda>();
+		for(ItemVenda x : itens) {
+			lista.add(x.getNotaDeVenda());
+		}
+		return lista;
 	}
 
 	public Integer getCod_produto() {
@@ -77,14 +90,6 @@ public class Produto implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public Double getValor_compra() {
-		return valor_compra;
-	}
-
-	public void setValor_compra(Double valor_compra) {
-		this.valor_compra = valor_compra;
-	}
-
 	public Double getValor_venda() {
 		return valor_venda;
 	}
@@ -92,16 +97,6 @@ public class Produto implements Serializable{
 	public void setValor_venda(Double valor_venda) {
 		this.valor_venda = valor_venda;
 	}
-
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	
 	
 	public List<Categoria> getCategorias() {
 		return categorias;
@@ -110,6 +105,15 @@ public class Produto implements Serializable{
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
 	}
+	
+	public Set<ItemVenda> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemVenda> itens) {
+		this.itens = itens;
+	}
+	
 
 	@Override
 	public int hashCode() {
@@ -135,6 +139,7 @@ public class Produto implements Serializable{
 			return false;
 		return true;
 	}
+
 	
 	
 }

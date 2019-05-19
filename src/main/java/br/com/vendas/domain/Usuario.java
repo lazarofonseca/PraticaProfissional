@@ -32,11 +32,6 @@ public class Usuario implements Serializable{
 	}
 
 
-
-
-
-
-
 	public String getNome() {
 		return nome;
 	}
@@ -45,9 +40,6 @@ public class Usuario implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-
-
 
 
 	public String getCpf() {

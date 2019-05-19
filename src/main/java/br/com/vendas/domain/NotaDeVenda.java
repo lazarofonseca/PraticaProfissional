@@ -2,6 +2,8 @@ package br.com.vendas.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,7 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 //CLASSE QUE REPRESENTA O PEDIDO DOS CLIENTES
 @Entity
@@ -20,11 +25,14 @@ public class NotaDeVenda implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer cod_nota;
+	@JsonFormat(pattern =  "dd/MM/yyyy HH:mm")
 	private Date instante;
 	
 	//Mapeamento um para um
+	
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "notaVenda")
 	private Pagamento pagamento;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "clienete_id")
@@ -34,6 +42,8 @@ public class NotaDeVenda implements Serializable{
 	@JoinColumn(name = "endereco_entrega_id")
 	private Endereco enderecoDeEntrega;
 	
+	@OneToMany(mappedBy = "cod_IdItem.notaDeVenda")
+	private Set<ItemVenda> itens = new HashSet<>();
 	
 	public NotaDeVenda() {
 		
@@ -98,6 +108,15 @@ public class NotaDeVenda implements Serializable{
 	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
+	
+	public Set<ItemVenda> getItens() {
+		return itens;
+	}
+
+
+	public void setItens(Set<ItemVenda> itens) {
+		this.itens = itens;
+	}
 
 
 	@Override
@@ -125,6 +144,9 @@ public class NotaDeVenda implements Serializable{
 			return false;
 		return true;
 	}
+
+
+	
 	
 	
 
