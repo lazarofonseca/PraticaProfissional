@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import br.com.vendas.domain.Categoria;
 import br.com.vendas.domain.Cidade;
@@ -38,6 +39,7 @@ import br.com.vendas.repositories.PagamentoRepository;
 import br.com.vendas.repositories.ProdutoRepository;
 
 @SpringBootApplication
+@EntityScan(basePackages = "br.com.vendas.domain")
 public class VendasApplication implements CommandLineRunner{
 
 	@Autowired
@@ -77,6 +79,14 @@ public class VendasApplication implements CommandLineRunner{
 			
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null	, "Escritório");
+		Categoria cat3 = new Categoria(null, "Cama mesa e Banho");
+		Categoria cat4 = new Categoria(null	, "Jardinagem");
+		Categoria cat5 = new Categoria(null, "Serralharia");
+		Categoria cat6 = new Categoria(null	, "Livros Ficção");
+		Categoria cat7 = new Categoria(null, "Livros Culinaria");
+		Categoria cat8 = new Categoria(null	, "Artes Marciais");
+		Categoria cat9 = new Categoria(null, "Automoveis");
+		Categoria cat10 = new Categoria(null	, "Motocicletas");
 		
 		Produto prod1 = new Produto(null, "Computador", "Laptop", 2500.0);
 		Produto prod2 = new Produto(null, "Impressora", "Laser", 1200.0);
@@ -90,7 +100,8 @@ public class VendasApplication implements CommandLineRunner{
 		prod3.getCategorias().addAll(Arrays.asList(cat1));
 	
 		
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, 
+				cat5, cat6,cat7, cat8, cat9, cat10));
 		produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3));
 		
 		
@@ -107,12 +118,12 @@ public class VendasApplication implements CommandLineRunner{
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 		
-		Cliente cliente01 = new Cliente("Lázaro Nóbrega", "000.111.222-12", 'M', new Date(), null, TipoCliente.PESSOAFISICA);
+		Cliente cliente01 = new Cliente("Lázaro Nóbrega", null, TipoCliente.PESSOAFISICA);
 		
 		cliente01.getTelefones().addAll(Arrays.asList("(83)3375-4145", "(83)98656-2311"));
 		
-		Endereco e1 = new Endereco(null, "José Lins do Regô", 213, "Próximo Assembléias", "Centro", "58180-000", cliente01, cid1);
-		Endereco e2 = new Endereco(null, "Sítio Patos", 0, "Próximo ao cruzeiro", "Zona Rural", "58180-000", cliente01, cid2);
+		Endereco e1 = new Endereco(null, "José Lins do Regô", "213", "Próximo Assembléias", "Centro", "58180-000", cliente01, cid1);
+		Endereco e2 = new Endereco(null, "Sítio Patos", "0", "Próximo ao cruzeiro", "Zona Rural", "58180-000", cliente01, cid2);
 	
 		cliente01.getEnderecos().addAll(Arrays.asList(e1, e2));
 		

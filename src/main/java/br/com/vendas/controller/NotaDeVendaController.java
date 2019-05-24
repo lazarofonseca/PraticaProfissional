@@ -21,9 +21,9 @@ public class NotaDeVendaController {
 	private NotaDeVendaService notaDeVendaService; 
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException{
+	public ResponseEntity<NotaDeVenda> find(@PathVariable Integer id) throws ObjectNotFoundException{
 		
-		NotaDeVenda obj = notaDeVendaService.busca(id);
+		NotaDeVenda obj = notaDeVendaService.find(id);
 		
 		return ResponseEntity.ok().body(obj);
 	}

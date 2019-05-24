@@ -40,7 +40,7 @@ public abstract class Pagamento implements Serializable{
 		NotaDeVenda notaVenda) {
 		super();
 		this.cod_pagamento = cod_pagamento;
-		this.estado = estado.getCod();
+		this.estado = (estado ==null) ? null : estado.getCod();
 		this.notaVenda = notaVenda;
 		
 	}

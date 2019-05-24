@@ -16,7 +16,7 @@ public class NotaDeVendaService {
 	@Autowired
 	private NotaDeVendaRepository repo; 
 
-	public NotaDeVenda busca(Integer id) throws ObjectNotFoundException {
+	public NotaDeVenda find(Integer id) throws ObjectNotFoundException {
 		
 		Optional<NotaDeVenda> obj = repo.findById(id);
 		
