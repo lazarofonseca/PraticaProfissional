@@ -16,8 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.vendas.domain.enums.TipoCliente;
 
@@ -35,7 +34,7 @@ public class Cliente implements Serializable{
 	private String email;
 	
 	
-	@JsonManagedReference
+	//@JsonManagedReference
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 	
@@ -45,8 +44,8 @@ public class Cliente implements Serializable{
 	
 	//Relacionamento um para muitos um cliente tem vários pedidos
 	
-	@JsonBackReference
-	//@JsonIgnore
+	//@JsonBackReference
+	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
 	

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Endereco implements Serializable{
@@ -18,14 +18,15 @@ public class Endereco implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cod_edereco;
+	private Integer id;
 	private String logradouro;
 	private String numero;
 	private String complemento;
 	private String bairro;
 	private String cep;
 	
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "Cliente_Id")
 	private Cliente cliente;
@@ -41,7 +42,7 @@ public class Endereco implements Serializable{
 	public Endereco(Integer cod_edereco, String logradouro, String numero, String complemento, String bairro,
 			String cep, Cliente cliente, Cidade cidade) {
 		super();
-		this.cod_edereco = cod_edereco;
+		this.id = cod_edereco;
 		this.logradouro = logradouro;
 		this.numero = numero;
 		this.complemento = complemento;
@@ -51,12 +52,12 @@ public class Endereco implements Serializable{
 		this.setCidade(cidade);
 	}
 
-	public Integer getCod_edereco() {
-		return cod_edereco;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCod_edereco(Integer cod_edereco) {
-		this.cod_edereco = cod_edereco;
+	public void setId(Integer cod_edereco) {
+		this.id = cod_edereco;
 	}
 
 	public String getLogradouro() {
@@ -119,7 +120,7 @@ public class Endereco implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cod_edereco == null) ? 0 : cod_edereco.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -132,10 +133,10 @@ public class Endereco implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Endereco other = (Endereco) obj;
-		if (cod_edereco == null) {
-			if (other.cod_edereco != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!cod_edereco.equals(other.cod_edereco))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
