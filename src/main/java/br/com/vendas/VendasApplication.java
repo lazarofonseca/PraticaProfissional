@@ -85,6 +85,8 @@ public class VendasApplication implements CommandLineRunner{
 		Categoria cat8 = new Categoria(null	, "Artes Marciais");
 		Categoria cat9 = new Categoria(null, "Automoveis");
 		Categoria cat10 = new Categoria(null	, "Motocicletas");
+		Categoria cat11 = new Categoria(null, "Móveis Projetados");
+		Categoria cat12 = new Categoria(null	, "Eletroeletrônicos");
 		
 		Produto p1 = new Produto(null, "Computador", 2500.0);
 		Produto p2 = new Produto(null, "Impressora", 1200.0);
