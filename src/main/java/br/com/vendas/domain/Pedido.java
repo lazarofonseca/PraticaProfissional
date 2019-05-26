@@ -16,24 +16,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 //CLASSE QUE REPRESENTA O PEDIDO DOS CLIENTES
 @Entity
-public class NotaDeVenda implements Serializable{
+public class Pedido implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cod_nota;
+	private Integer id;
 	@JsonFormat(pattern =  "dd/MM/yyyy HH:mm")
 	private Date instante;
 	
 	//Mapeamento um para um
 	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "notaVenda")
+	@JsonManagedReference
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
 	
 	
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "clienete_id")
 	private Cliente cliente;
@@ -42,31 +45,40 @@ public class NotaDeVenda implements Serializable{
 	@JoinColumn(name = "endereco_entrega_id")
 	private Endereco enderecoDeEntrega;
 	
-	@OneToMany(mappedBy = "cod_IdItem.notaDeVenda")
-	private Set<ItemVenda> itens = new HashSet<>();
+	@OneToMany(mappedBy = "id.pedido")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
-	public NotaDeVenda() {
+	public Pedido() {
 		
 	}
 
-
-	public NotaDeVenda(Integer cod_nota, Date instante, Cliente cliente,
-			Endereco enderecoDeEntrega) {
+	public Pedido(Integer id, Date instante,Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
-		this.cod_nota = cod_nota;
+		this.id = id;
 		this.instante = instante;
 		this.cliente = cliente;
 		this.enderecoDeEntrega = enderecoDeEntrega;
+		
+	}
+
+	//Metódo que soma os subtotais dos itens do pedido para dar o valor total do pedido
+	public double getValorTotal() {
+		double soma = 0.0;
+		for(ItemPedido subTotalItem : itens) {
+			soma += subTotalItem.getSubTotal();
+		}
+		return soma;
+	} 
+	
+	
+	
+	public Integer getId() {
+		return id;
 	}
 
 
-	public Integer getCod_nota() {
-		return cod_nota;
-	}
-
-
-	public void setCod_nota(Integer cod_nota) {
-		this.cod_nota = cod_nota;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 
@@ -109,12 +121,12 @@ public class NotaDeVenda implements Serializable{
 		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 	
-	public Set<ItemVenda> getItens() {
+	public Set<ItemPedido> getItens() {
 		return itens;
 	}
 
 
-	public void setItens(Set<ItemVenda> itens) {
+	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
 
@@ -123,7 +135,7 @@ public class NotaDeVenda implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cod_nota == null) ? 0 : cod_nota.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -136,11 +148,11 @@ public class NotaDeVenda implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		NotaDeVenda other = (NotaDeVenda) obj;
-		if (cod_nota == null) {
-			if (other.cod_nota != null)
+		Pedido other = (Pedido) obj;
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!cod_nota.equals(other.cod_nota))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

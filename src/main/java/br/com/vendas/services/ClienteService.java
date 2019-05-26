@@ -26,7 +26,7 @@ import javassist.tools.rmi.ObjectNotFoundException;
 public class ClienteService {
 
 	@Autowired
-	private ClienteRepository repo;
+	private ClienteRepository clienteRepository;
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
@@ -36,7 +36,7 @@ public class ClienteService {
 
 	public Cliente find(Integer id) throws ObjectNotFoundException {
 
-		Optional<Cliente> obj = repo.findById(id);
+		Optional<Cliente> obj = clienteRepository.findById(id);
 
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrada! Id: " + id + ", Tipo: " + Cliente.class.getName()));
@@ -45,32 +45,32 @@ public class ClienteService {
 
 	@Transactional
 	public Cliente insert(Cliente obj) {
-		obj.setCod_cliente(null);
-		repo.save(obj);
+		obj.setId(null);
+		clienteRepository.save(obj);
 		enderecoRepository.saveAll(obj.getEnderecos());
 		return obj;
 	}
 
 	public Cliente update(Cliente obj) throws ObjectNotFoundException {
-		Cliente newObj = find(obj.getCod_cliente());
+		Cliente newObj = find(obj.getId());
 		updateData(newObj, obj);
-		return repo.save(newObj);
+		return clienteRepository.save(newObj);
 	}
 
 	public void delete(Integer id) throws ObjectNotFoundException {
 		find(id);
-		repo.deleteById(id);
+		clienteRepository.deleteById(id);
 
 	}
 
 	public List<Cliente> findAll() {
-		return repo.findAll();
+		return clienteRepository.findAll();
 	}
 
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
-		return repo.findAll(pageRequest);
+		return clienteRepository.findAll(pageRequest);
 	}
 
 	public Cliente fromDTO(ClienteDTO objDto) {

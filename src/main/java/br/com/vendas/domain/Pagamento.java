@@ -1,4 +1,4 @@
-package br.com.vendas.domain;
+ 	package br.com.vendas.domain;
 
 import java.io.Serializable;
 
@@ -10,47 +10,51 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import br.com.vendas.domain.enums.EstadoPagamento;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	private Integer cod_pagamento;
+	private Integer id;
 	private Integer estado;
 	
-	@JsonIgnore
+	@JsonBackReference
+	//@JsonIgnore
 	@OneToOne
-	@JoinColumn(name = "cod_nota")
+	@JoinColumn(name = "pedido_id")
 	@MapsId
-	private NotaDeVenda notaVenda;
+	private Pedido pedido;
 
 	
 	
 	public Pagamento() {
 		
 	}
+	
 
-	public Pagamento(Integer cod_pagamento, EstadoPagamento estado,
-		NotaDeVenda notaVenda) {
+
+	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
-		this.cod_pagamento = cod_pagamento;
-		this.estado = (estado ==null) ? null : estado.getCod();
-		this.notaVenda = notaVenda;
-		
+		this.id = id;
+		this.estado = (estado==null) ? null : estado.getCod();
+		this.pedido = pedido;
 	}
 
-	public Integer getCod_pagamento() {
-		return cod_pagamento;
+
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCod_pagamento(Integer cod_pagamento) {
-		this.cod_pagamento = cod_pagamento;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public EstadoPagamento getEstado() {
@@ -61,19 +65,19 @@ public abstract class Pagamento implements Serializable{
 		this.estado = estado.getCod();
 	}
 
-	public NotaDeVenda getNotaVenda() {
-		return notaVenda;
+	public Pedido getPedido() {
+		return pedido;
 	}
 
-	public void setNotaVenda(NotaDeVenda notaVenda) {
-		this.notaVenda = notaVenda;
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cod_pagamento == null) ? 0 : cod_pagamento.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -86,10 +90,10 @@ public abstract class Pagamento implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Pagamento other = (Pagamento) obj;
-		if (cod_pagamento == null) {
-			if (other.cod_pagamento != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!cod_pagamento.equals(other.cod_pagamento))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

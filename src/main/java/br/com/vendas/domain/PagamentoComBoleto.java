@@ -5,10 +5,12 @@ import java.util.Date;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import br.com.vendas.domain.enums.EstadoPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComBoleto")
 public class PagamentoComBoleto extends Pagamento{
 	private static final long serialVersionUID = 1L;
 	
@@ -20,12 +22,14 @@ public class PagamentoComBoleto extends Pagamento{
 		
 	}
 
-	public PagamentoComBoleto(Integer cod_pagamento, EstadoPagamento estado, NotaDeVenda notaVenda, 
-			Date dataVencimento, Date dataPagamento) {
-		super(cod_pagamento, estado, notaVenda);
-		this.dataVencimento = dataVencimento;
+	
+	public PagamentoComBoleto(Integer id, EstadoPagamento estado, Pedido pedido, Date dataVencimento, Date dataPagamento) {
+		super(id, estado, pedido);
 		this.dataPagamento = dataPagamento;
+		this.dataVencimento = dataVencimento;
 	}
+
+
 
 	public Date getDataVencimento() {
 		return dataVencimento;

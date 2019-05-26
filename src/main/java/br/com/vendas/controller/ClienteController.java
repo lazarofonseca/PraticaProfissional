@@ -36,7 +36,7 @@ public class ClienteController {
 	private ClienteService clienteService; 
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Cliente> find(@PathVariable Integer id) throws ObjectNotFoundException{
+	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException{
 		
 		Cliente obj = clienteService.find(id);
 		
@@ -48,7 +48,7 @@ public class ClienteController {
 		Cliente obj = clienteService.fromDTO(objDto);
 		obj = clienteService.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(obj.getCod_cliente()).toUri();
+				.buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
@@ -56,7 +56,7 @@ public class ClienteController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@Valid @RequestBody ClienteDTO objDto, @PathVariable Integer id) throws ObjectNotFoundException{
 		Cliente obj = clienteService.fromDTO(objDto);
-		obj.setCod_cliente(id);
+		obj.setId(id);
 		obj = clienteService.update(obj);
 		return ResponseEntity.noContent().build();
 	}

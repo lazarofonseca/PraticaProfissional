@@ -9,7 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.vendas.domain.Cliente;
+import br.com.vendas.services.validation.ClientUpDate;
 
+@ClientUpDate
 public class ClienteDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +31,7 @@ public class ClienteDTO implements Serializable{
 	}
 	
 	public ClienteDTO(Cliente obj) {
-		id = obj.getCod_cliente();
+		id = obj.getId();
 		nome = obj.getNome();
 		email = obj.getEmail();
 	}

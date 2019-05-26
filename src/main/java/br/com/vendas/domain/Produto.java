@@ -24,9 +24,8 @@ public class Produto implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cod_produto;
+	private Integer id;
 	private String nome;
-	private String descricao;
 	private Double valor_venda;
 	
 	
@@ -35,12 +34,12 @@ public class Produto implements Serializable{
 	@ManyToMany
 	@JoinTable(name = "PRODUTO_CATEGORIA",
 	joinColumns = @JoinColumn(name = "produto_id"),
-	inverseJoinColumns = @JoinColumn(name = "categoria_id"))
-	private List<Categoria> categorias = new ArrayList<Categoria>();
+	inverseJoinColumns = @JoinColumn(name = "id_categoria"))
+	private List<Categoria> categorias = new ArrayList<>();
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "cod_IdItem.produto")
-	private Set<ItemVenda> itens = new HashSet<ItemVenda>();
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
 	
 	
 	
@@ -48,30 +47,29 @@ public class Produto implements Serializable{
 		
 	}
 
-	public Produto(Integer cod_produto, String nome, String descricao,Double valor_venda) {
+	public Produto(Integer id, String nome, Double valor_venda) {
 		super();
-		this.cod_produto = cod_produto;
+		this.id = id;
 		this.nome = nome;
-		this.descricao = descricao;
 		this.valor_venda = valor_venda;
 		
 	}
 	
 	@JsonIgnore
-	public List<NotaDeVenda> GetnotaDeVendas(){
-		List<NotaDeVenda> lista = new ArrayList<NotaDeVenda>();
-		for(ItemVenda x : itens) {
-			lista.add(x.getNotaDeVenda());
+	public List<Pedido> getPedidos(){
+		List<Pedido> lista = new ArrayList<Pedido>();
+		for(ItemPedido x : itens) {
+			lista.add(x.getPedido());
 		}
 		return lista;
 	}
 
-	public Integer getCod_produto() {
-		return cod_produto;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCod_produto(Integer cod_produto) {
-		this.cod_produto = cod_produto;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getNome() {
@@ -82,13 +80,6 @@ public class Produto implements Serializable{
 		this.nome = nome;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
 
 	public Double getValor_venda() {
 		return valor_venda;
@@ -106,11 +97,11 @@ public class Produto implements Serializable{
 		this.categorias = categorias;
 	}
 	
-	public Set<ItemVenda> getItens() {
+	public Set<ItemPedido> getItens() {
 		return itens;
 	}
 
-	public void setItens(Set<ItemVenda> itens) {
+	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
 	
@@ -119,7 +110,7 @@ public class Produto implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cod_produto == null) ? 0 : cod_produto.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -132,10 +123,10 @@ public class Produto implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Produto other = (Produto) obj;
-		if (cod_produto == null) {
-			if (other.cod_produto != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!cod_produto.equals(other.cod_produto))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}

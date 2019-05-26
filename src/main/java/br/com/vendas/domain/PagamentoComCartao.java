@@ -2,23 +2,24 @@ package br.com.vendas.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import br.com.vendas.domain.enums.EstadoPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento{
 	private static final long serialVersionUID = 1L;
 	
-	private Integer numeroDeParcelas;
+	protected Integer numeroDeParcelas;
 	
 	public PagamentoComCartao() {
 		
 	}
 
-	public PagamentoComCartao(Integer cod_pagamento, EstadoPagamento estado, NotaDeVenda notaVenda,
-			Integer numeroDeParcelas) {
-		super(cod_pagamento, estado, notaVenda);
+	public PagamentoComCartao(Integer id, EstadoPagamento estado, Pedido pedido, Integer numeroDeParcelas) {
+		super(id, estado, pedido);
 		this.numeroDeParcelas = numeroDeParcelas;
-		
 	}
 
 	public Integer getNumeroDeParcelas() {
@@ -28,6 +29,7 @@ public class PagamentoComCartao extends Pagamento{
 	public void setNumeroDeParcelas(Integer numeroDeParcelas) {
 		this.numeroDeParcelas = numeroDeParcelas;
 	}
+
 	
 
 }

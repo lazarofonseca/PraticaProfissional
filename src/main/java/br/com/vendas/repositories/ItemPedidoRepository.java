@@ -3,10 +3,10 @@ package br.com.vendas.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.vendas.domain.ItemVenda;
+import br.com.vendas.domain.ItemPedido;
 
 
 @Repository
-public interface ItemVendaRepository extends JpaRepository<ItemVenda, Integer> {
+public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Integer> {
 
 }

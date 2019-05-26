@@ -2,13 +2,13 @@ package br.com.vendas.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import br.com.vendas.domain.enums.TipoCliente;
 
@@ -26,41 +27,37 @@ public class Cliente implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer cod_cliente;
+	private Integer id;
 	private String nome;
 	private String cpfOuCnpj;
 	private Integer tipo;
+	@Column(unique = true)
 	private String email;
 	
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<Endereco>();
 	
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
-	private Set<String> telefones = new HashSet<String>();
+	private Set<String> telefones = new HashSet<>();
 	
-	//Relacionamento um para muitos um cliente tem várias notas
+	//Relacionamento um para muitos um cliente tem vários pedidos
 	
-	@JsonIgnore
+	@JsonBackReference
+	//@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
-	private List<NotaDeVenda> notaDeVenda = new ArrayList<NotaDeVenda>();
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	//Construtor padrão
 	public Cliente() {
 		super();
 	}
 	
-	//Construtor da super classe
-	public Cliente(String nome, Integer cod_cliente,
-			TipoCliente tipo) {
-		this.cod_cliente = cod_cliente;
-		this.tipo = tipo.getCod();
-	}
-
 	//Construtor cliente
 	public Cliente(Integer cod_cliente, String nome, String cpfOuCnpj, TipoCliente tipo, String email) {
-		this.cod_cliente = cod_cliente;
+		this.id = cod_cliente;
 		this.nome = nome;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo==null) ? null : tipo.getCod();
@@ -69,8 +66,8 @@ public class Cliente implements Serializable{
 
 
 
-	public Integer getCod_cliente() {
-		return cod_cliente;
+	public Integer getId() {
+		return id;
 	}
 
 
@@ -90,19 +87,17 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
-	public void setCod_cliente(Integer cod_cliente) {
-		this.cod_cliente = cod_cliente;
+	public void setId(Integer cod_cliente) {
+		this.id = cod_cliente;
 	}
 
 
-	public List<NotaDeVenda> getNotaDeVenda() {
-		return notaDeVenda;
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 
-
-
-	public void setNotaDeVenda(List<NotaDeVenda> notaDeVenda) {
-		this.notaDeVenda = notaDeVenda;
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	//Pegando o código com o metódo toEnum que é statico
@@ -142,7 +137,7 @@ public class Cliente implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((cod_cliente == null) ? 0 : cod_cliente.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -155,10 +150,10 @@ public class Cliente implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		if (cod_cliente == null) {
-			if (other.cod_cliente != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!cod_cliente.equals(other.cod_cliente))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
