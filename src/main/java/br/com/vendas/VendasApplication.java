@@ -142,7 +142,7 @@ public class VendasApplication implements CommandLineRunner{
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 		
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
-		Cliente cliente01 = new Cliente(null, "Lázaro Nóbrega FOnseca", "07673706431", TipoCliente.PESSOAFISICA, "lazaronobrega3@gmail.com");
+		Cliente cliente01 = new Cliente(null, "Lázaro Nóbrega Fnseca", "07673706431", TipoCliente.PESSOAFISICA, "lazaronobrega3@gmail.com");
 		cliente01.getTelefones().addAll(Arrays.asList("(83)3375-4145", "(83)98656-2311"));
 		
 		Endereco e1 = new Endereco(null, "José Lins do Regô", "213", "Próximo Assembléias", "Centro", "58180-000", cliente01, cid1);
