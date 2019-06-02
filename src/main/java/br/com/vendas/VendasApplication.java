@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.vendas.domain.Categoria;
 import br.com.vendas.domain.Cidade;
@@ -24,6 +25,7 @@ import br.com.vendas.domain.Pedido;
 //import br.com.vendas.domain.Funcionario;
 import br.com.vendas.domain.Produto;
 import br.com.vendas.domain.enums.EstadoPagamento;
+import br.com.vendas.domain.enums.Perfil;
 import br.com.vendas.domain.enums.TipoCliente;
 import br.com.vendas.repositories.CategoriaRepository;
 import br.com.vendas.repositories.CidadeRepository;
@@ -35,11 +37,18 @@ import br.com.vendas.repositories.PagamentoRepository;
 import br.com.vendas.repositories.PedidoRepository;
 //import br.com.vendas.repositories.FuncionarioRepository;
 import br.com.vendas.repositories.ProdutoRepository;
+import br.com.vendas.services.S3Service;
 
 @SpringBootApplication
 @EntityScan(basePackages = "br.com.vendas.domain")
 public class VendasApplication implements CommandLineRunner{
 
+	@Autowired
+	S3Service s3Service;
+	
+	@Autowired
+	private BCryptPasswordEncoder passEncod;
+	
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
@@ -74,7 +83,19 @@ public class VendasApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-			
+		
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/geek.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/artesmarciais.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/automoveis.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/camamesaebanho.jpeg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/eletroeletronicos.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/escritorio.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/jardinagem.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/livrosculinaria.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/livrosficcao.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/motocicletas.jpg");
+		//s3Service.uploadFile("/home/lazaro/Área de Trabalho/Analise e Desenvolvimento de Sistemas/V SEMESTRE/PRÁTICA PROFISSIONAL/Imagens/moveisprojetados.jpg");
+		
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null	, "Escritório");
 		Categoria cat3 = new Categoria(null, "Cama mesa e Banho");
@@ -132,7 +153,7 @@ public class VendasApplication implements CommandLineRunner{
 		Estado est2 = new Estado(null, "Rio Grande do Norte");
 		
 		Cidade cid1 = new Cidade(null, "Pedra Lavrada", est1);
-		Cidade cid2 = new Cidade(null, "Nova Palmeira", est1);
+		Cidade cid2 = new Cidade(null, "Campina Grande", est1);
 		Cidade cid3 = new Cidade(null, "Parelhas", est2);
 		
 		est1.getCidades().addAll(Arrays.asList(cid1, cid2));
@@ -142,16 +163,25 @@ public class VendasApplication implements CommandLineRunner{
 		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
 		
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11));
-		Cliente cliente01 = new Cliente(null, "Lázaro Nóbrega Fnseca", "07673706431", TipoCliente.PESSOAFISICA, "lazaronobrega3@gmail.com");
+		Cliente cliente01 = new Cliente(null, "Lázaro Nóbrega Fonseca", "07673706431", TipoCliente.PESSOAFISICA, "lazaronobrega3@gmail.com", passEncod.encode("12345"));
 		cliente01.getTelefones().addAll(Arrays.asList("(83)3375-4145", "(83)98656-2311"));
 		
-		Endereco e1 = new Endereco(null, "José Lins do Regô", "213", "Próximo Assembléias", "Centro", "58180-000", cliente01, cid1);
-		Endereco e2 = new Endereco(null, "Sítio Patos", "0", "Próximo ao cruzeiro", "Zona Rural", "58180-000", cliente01, cid2);
-	
-		cliente01.getEnderecos().addAll(Arrays.asList(e1, e2));
+		Cliente cliente02 = new Cliente(null, "Maria José Nóbrega Fonseca", "16027264420", TipoCliente.PESSOAFISICA, "lazaromix@hotmail.com", passEncod.encode("54321"));
+		cliente02.getTelefones().addAll(Arrays.asList("(83)3375-4145", "(83)98604-4760"));
+		cliente02.addPerfil(Perfil.ADMIN);
 		
-		clienteRepository.saveAll(Arrays.asList(cliente01));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		
+		
+		Endereco e1 = new Endereco(null, "José Lins do Regô", "213", "Próximo Assémbleia", "Centro", "58180-000", cliente01, cid1);
+		Endereco e2 = new Endereco(null, "Sítio Patos", "0", "Próximo ao cruzeiro", "Zona Rural", "58180-000", cliente01, cid2);
+		Endereco e3 = new Endereco(null, "José Lins do regô", "213", null , "Centro", "58180-000", cliente02, cid1);
+		
+		cliente01.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cliente02.getEnderecos().addAll(Arrays.asList(e3));
+		
+		
+		clienteRepository.saveAll(Arrays.asList(cliente01, cliente02));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		

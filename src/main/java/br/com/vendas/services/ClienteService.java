@@ -1,15 +1,20 @@
 package br.com.vendas.services;
 
+import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.vendas.domain.Cidade;
 import br.com.vendas.domain.Cliente;
@@ -20,11 +25,15 @@ import br.com.vendas.dto.ClienteNewDTO;
 import br.com.vendas.repositories.CidadeRepository;
 import br.com.vendas.repositories.ClienteRepository;
 import br.com.vendas.repositories.EnderecoRepository;
+import br.com.vendas.security.UserSS;
 import javassist.tools.rmi.ObjectNotFoundException;
 
 @Service
 public class ClienteService {
 
+	@Autowired
+	private BCryptPasswordEncoder passEncod;
+	
 	@Autowired
 	private ClienteRepository clienteRepository;
 
@@ -33,6 +42,18 @@ public class ClienteService {
 
 	@Autowired
 	CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService ImageService;
+	
+	@Autowired
+	private UserDetailsServiceImplements userService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
 
 	public Cliente find(Integer id) throws ObjectNotFoundException {
 
@@ -75,13 +96,13 @@ public class ClienteService {
 
 	public Cliente fromDTO(ClienteDTO objDto) {
 
-		return new Cliente(objDto.getId(), objDto.getNome(), null, null, objDto.getEmail());
+		return new Cliente(objDto.getId(), objDto.getNome(), null, null, objDto.getEmail(), null);
 	}
 
 	public Cliente fromDTO(ClienteNewDTO objDto) throws ObjectNotFoundException {
 
 		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()),
-				objDto.getEmail());
+				objDto.getEmail(),  passEncod.encode(objDto.getSenha()));
 		
 		//Cidade cid = findCid(objDto.getCidadeId());
 
@@ -103,14 +124,21 @@ public class ClienteService {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 	}
-/*
-	public Cidade findCid(Integer id) throws ObjectNotFoundException {
 
-		Optional<Cidade> obj = cidadeRepository.findById(id);
+	public URI uploadProfilePicture(MultipartFile multipartFile) throws ObjectNotFoundException {
+		//Verifica se usuário está logado
+		
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new RuntimeException("Acesso negado");
+		}
+		
+		BufferedImage jpgImage = ImageService.getJpgImageFromFile(multipartFile);
+		String fileName = prefix + user.getId() + ".jpg";
+		
+		return s3Service.uploadFile(ImageService.getInputStream(jpgImage, "jpg"), fileName, "image");
+		
 
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrada! Id: " + id + ", Tipo: " + Cidade.class.getName()));
-
+		
 	}
-	*/
 }

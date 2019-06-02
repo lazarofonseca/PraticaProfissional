@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import br.com.vendas.services.exception.DataIntegrityException;
+import br.com.vendas.services.exception.FileException;
 import javassist.tools.rmi.ObjectNotFoundException;
 
 //Classe auxiliar que intercepta as exceções
@@ -49,6 +50,15 @@ public class ControllerExceptionHandler {
 			}
 			
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+
+	}
+	
+	@ExceptionHandler(FileException.class)
+	public ResponseEntity<StandardError> file(FileException e,HttpServletRequest request){
+	
+			StandardError error = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), 
+					System.currentTimeMillis());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 
 	}
 	

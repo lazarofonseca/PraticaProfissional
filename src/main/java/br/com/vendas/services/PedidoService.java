@@ -10,7 +10,6 @@ import br.com.vendas.domain.ItemPedido;
 import br.com.vendas.domain.PagamentoComBoleto;
 import br.com.vendas.domain.Pedido;
 import br.com.vendas.domain.enums.EstadoPagamento;
-import br.com.vendas.repositories.ClienteRepository;
 import br.com.vendas.repositories.ItemPedidoRepository;
 import br.com.vendas.repositories.PagamentoRepository;
 import br.com.vendas.repositories.PedidoRepository;
@@ -50,6 +49,7 @@ public class PedidoService {
 
 	}
 
+	
 	public Pedido insert(Pedido obj) throws ObjectNotFoundException {
 		obj.setId(null);
 		obj.setInstante(new Date());

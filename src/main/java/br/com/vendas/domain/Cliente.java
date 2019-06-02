@@ -1,3 +1,4 @@
+
 package br.com.vendas.domain;
 
 import java.io.Serializable;
@@ -5,12 +6,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +21,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.vendas.domain.enums.Perfil;
 import br.com.vendas.domain.enums.TipoCliente;
 
 @Entity
@@ -30,6 +34,8 @@ public class Cliente implements Serializable{
 	private String nome;
 	private String cpfOuCnpj;
 	private Integer tipo;
+	@JsonIgnore
+	private String senha;
 	@Column(unique = true)
 	private String email;
 	
@@ -42,6 +48,10 @@ public class Cliente implements Serializable{
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
+	
 	//Relacionamento um para muitos um cliente tem vários pedidos
 	
 	//@JsonBackReference
@@ -51,16 +61,18 @@ public class Cliente implements Serializable{
 	
 	//Construtor padrão
 	public Cliente() {
-		super();
+		addPerfil(Perfil.CLIENTE);
 	}
 	
 	//Construtor cliente
-	public Cliente(Integer cod_cliente, String nome, String cpfOuCnpj, TipoCliente tipo, String email) {
+	public Cliente(Integer cod_cliente, String nome, String cpfOuCnpj, TipoCliente tipo, String email, String senha) {
 		this.id = cod_cliente;
 		this.nome = nome;
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo==null) ? null : tipo.getCod();
 		this.email = email;
+		this.senha = senha;
+		addPerfil(Perfil.CLIENTE);
 	}
 
 
@@ -106,6 +118,22 @@ public class Cliente implements Serializable{
 
 	public void setTipo(TipoCliente tipo) {
 		this.tipo = tipo.getCod();
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+	
+	public Set<Perfil> getPerfil(){
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
 	}
 
 	public List<Endereco> getEnderecos() {
@@ -156,9 +184,5 @@ public class Cliente implements Serializable{
 			return false;
 		return true;
 	}
-
-	
-	
-	
 
 }

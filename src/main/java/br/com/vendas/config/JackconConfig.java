@@ -3,6 +3,7 @@ package br.com.vendas.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -37,5 +38,7 @@ public class JackconConfig {
 	public SmtpEmailService smtpEmailService() {
 		return new SmtpEmailService();
 	}
+	
+	
 
 }
